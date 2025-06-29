@@ -1,7 +1,7 @@
 name: CI Pipeline Week 4
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
 
@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout main branch only (safe)
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -23,13 +25,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run unit tests
-        run: pytest tests/
+        run: PYTHONPATH=$PWD pytest tests/
 
       - name: Run sanity test
         run: |
           python src/pipeline.py > report.txt
 
-      - name: Post CML report
+      - name: Install CML
+        run: |
+          npm install -g @dvcorg/cml
+
+      - name: Post CML report as comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
