@@ -1,4 +1,4 @@
 pandas
 scikit-learn
-pytest
+pytest>=7.0
 cml
