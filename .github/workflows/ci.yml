@@ -30,7 +30,7 @@ jobs:
           python src/pipeline.py > report.txt
 
       - name: Install CML
-        run: pip install cml
+        run: npm install -g @dvcorg/cml
 
       - name: Post CML report
         env:
